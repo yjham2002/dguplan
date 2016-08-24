@@ -11,7 +11,10 @@ import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
+import weekview.WeekViewEvent;
 
 public class userDTO extends AsyncTask<Void, Void, String> {
 
@@ -58,6 +61,7 @@ public class userDTO extends AsyncTask<Void, Void, String> {
         }catch(IOException e){ e.printStackTrace(); }
         return content;
     }
+
     @Override
     protected void onPostExecute(String result) {
         if (result != null){
@@ -78,7 +82,7 @@ public class userDTO extends AsyncTask<Void, Void, String> {
                             if(td.text().trim().length() <= 3) temp.add(new ClassInfo(ClassInfo.NULLCLASS, ClassInfo.NULLCLASS, rawtime, ClassInfo.NULLPTR));
                             else{
                                 temp.add(new ClassInfo(td.text().substring(0, td.text().indexOf('(') - 1),
-                                        td.text().substring(td.text().indexOf('('), td.text().length() - 1), rawtime, tdCnt));
+                                        td.text().substring(td.text().indexOf('('), td.text().length() - 1), rawtime, tdCnt, true));
                             }
                         }
                     }

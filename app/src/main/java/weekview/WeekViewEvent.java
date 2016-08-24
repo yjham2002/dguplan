@@ -18,7 +18,7 @@ public class WeekViewEvent {
     private String mLocation;
     private int mColor;
     private boolean mAllDay;
-
+    public String title;
     public WeekViewEvent(){
 
     }
@@ -76,6 +76,16 @@ public class WeekViewEvent {
         this.mAllDay = allDay;
     }
 
+    public WeekViewEvent clone(){
+        WeekViewEvent obj = new WeekViewEvent();
+        obj.setId(this.mId);
+        obj.setName(this.mName);
+        obj.setLocation(this.mLocation);
+        obj.setStartTime((Calendar) this.mStartTime.clone());
+        obj.setEndTime((Calendar) this.mEndTime.clone());
+        return obj;
+    }
+
     /**
      * Initializes the event for week view.
      * @param id The id of the event.
@@ -115,6 +125,8 @@ public class WeekViewEvent {
     public void setEndTime(Calendar endTime) {
         this.mEndTime = endTime;
     }
+
+    public boolean getAllday(){return mAllDay;}
 
     public String getName() {
         return mName;
