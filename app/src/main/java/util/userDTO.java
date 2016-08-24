@@ -1,6 +1,8 @@
 package util;
 
 import android.os.AsyncTask;
+import android.util.Log;
+
 import com.planner.dgu.dguplan.ClassInfo;
 import com.planner.dgu.dguplan.URLS;
 
@@ -8,6 +10,7 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +21,14 @@ import weekview.WeekViewEvent;
 
 public class userDTO extends AsyncTask<Void, Void, String> {
 
+    public static String conn = "시간표", userId = "", userPw = "", userName = "";
+
+    public String content ="";
+    public Document doc;
+    public boolean isConnected = false;
+
     private SFCallback preprocessCallback;
+    private SFCallback connCallback;
     private SFCallback successCallback;
     private SFCallback failCallback;
 
@@ -35,19 +45,25 @@ public class userDTO extends AsyncTask<Void, Void, String> {
         this.successCallback = successCallback;
     }
 
-    public String content ="";
-    public Document doc;
+    public userDTO(SFCallback successCallback, SFCallback failCallback, SFCallback connCallback, String id, String pw){
+        this.successCallback = successCallback;
+        this.failCallback = failCallback;
+        this.connCallback = connCallback;
+        this.userId = id;
+        this.userPw = pw;
+    }
 
     @Override
     protected String doInBackground(Void... params) {
+        isConnected = true;
         if (preprocessCallback != null){
             preprocessCallback.callback();
         }
         try {
             Connection.Response res = Jsoup.connect(URLS.URL_LOGIN)
                     .followRedirects(true)
-                    .data("userDTO.userId", "2014112021")
-                    .data("userDTO.password", "gpswpf12!")
+                    .data("userDTO.userId", userId)
+                    .data("userDTO.password", userPw)
                     .method(Connection.Method.POST)
                     .timeout(TIMEOUT)
                     .execute();
@@ -58,13 +74,19 @@ public class userDTO extends AsyncTask<Void, Void, String> {
                     .timeout(TIMEOUT)
                     .post();
             content = doc.toString();
-        }catch(IOException e){ e.printStackTrace(); }
+        }catch(IOException e){ isConnected = false; }
         return content;
     }
 
     @Override
     protected void onPostExecute(String result) {
-        if (result != null){
+        if (isConnected){
+            Element userConnection = doc.select("SPAN[class = selected]").first();
+            if(userConnection == null) {
+                connCallback.callback();
+                return;
+            }
+            conn = userConnection.text();
             Element table = doc.select("TABLE[class = bbs-table01]").first();
             int trCnt = 0;
             for(Element row : table.select("tr")) {

@@ -1,6 +1,7 @@
 package com.planner.dgu.dguplan;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.animation.Animation;
@@ -13,15 +14,21 @@ import util.userDTO;
 
 public class IntroActivity extends BaseActivity {
 
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor prefEditor;
     public static userDTO session;
     private Handler h;
-    private int delayTime = 1000;
+    private int delayTime = 1200;
     private ImageView iv;
+    private boolean isSuccess = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
+        isSuccess = true;
+        prefs = getSharedPreferences("DGUPLAN", MODE_PRIVATE);
+        prefEditor = prefs.edit();
 
         iv = (ImageView)findViewById(R.id.imageView);
         iv.setDrawingCacheEnabled(true);
@@ -39,12 +46,30 @@ public class IntroActivity extends BaseActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                session = new userDTO(new SFCallback() {
-                    public void callback() {
-                        h.postDelayed(intro, delayTime);
-                    }
-                });
-                session.execute();
+                if(prefs.getBoolean("autoLogin", false)){
+                    IntroActivity.session = new userDTO(new SFCallback() {
+                        public void callback() {
+                            isSuccess = true;
+                            h.postDelayed(intro, delayTime);
+                        }
+                    }, new SFCallback() {
+                        public void callback() {
+                            isSuccess = false;
+                            toast("인터넷에 연결할 수 없습니다.");
+                            h.postDelayed(intro, delayTime);
+                        }
+                    }, new SFCallback() {
+                        public void callback() {
+                            isSuccess = false;
+                            toast("로그인을 실패하였습니다.");
+                            h.postDelayed(intro, delayTime);
+                        }
+                    }, prefs.getString("userId", "#"), prefs.getString("userPw", "#"));
+                    IntroActivity.session.execute();
+                }else {
+                    isSuccess = false;
+                    h.postDelayed(intro, delayTime);
+                }
             }
 
             @Override
@@ -56,8 +81,10 @@ public class IntroActivity extends BaseActivity {
 
     Runnable intro = new Runnable() {
         public void run() {
-            Intent i = new Intent(IntroActivity.this, MainActivity.class);
-            startActivity(i);
+            Intent i = new Intent(IntroActivity.this, LoginActivity.class);
+            Intent ii = new Intent(IntroActivity.this, MainActivity.class);
+            if(!isSuccess) startActivity(i);
+            else startActivity(ii);
             finish();
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
