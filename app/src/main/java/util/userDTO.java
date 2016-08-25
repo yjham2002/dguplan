@@ -11,21 +11,17 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-
-import weekview.WeekViewEvent;
 
 public class userDTO extends AsyncTask<Void, Void, String> {
 
     public static String conn = "시간표", userId = "", userPw = "", userName = "";
 
     public String content ="";
-    public Document doc, doc2;
+    public Document doc, doc2, doc3;
     public boolean isConnected = false;
     public static int asCnt = 0, handinCnt = 0, realCnt = 0;
 
@@ -83,6 +79,20 @@ public class userDTO extends AsyncTask<Void, Void, String> {
                     .method(Connection.Method.POST)
                     .timeout(TIMEOUT)
                     .post();
+            doc2 = Jsoup.connect(URLS.URL_ASSIGN)
+                    .followRedirects(true)
+                    .cookies(res.cookies())
+                    .followRedirects(true)
+                    .method(Connection.Method.POST)
+                    .timeout(TIMEOUT)
+                    .post();
+            doc3 = Jsoup.connect(URLS.URL_HOME)
+                    .followRedirects(true)
+                    .cookies(res.cookies())
+                    .followRedirects(true)
+                    .method(Connection.Method.POST)
+                    .timeout(TIMEOUT)
+                    .post();
             content = doc.toString();
         }catch(IOException e){ isConnected = false; }
         return content;
@@ -91,7 +101,18 @@ public class userDTO extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         if (isConnected){
+            asCnt = 0;
             Element assign = doc2.select("TABLE[class = list-table]").first();
+            if(assign == null) {
+                connCallback.callback();
+                return;
+            }
+            Element getUser = doc3.select("SPAN>strong").first();
+            if(getUser == null) {
+                connCallback.callback();
+                return;
+            }
+            userName = getUser.text().trim();
             for(Element row : assign.select("tr")) {
                 AssignInfo temp = null;
                 if(row.children().size() >= 7) {

@@ -1,5 +1,6 @@
 package weekview;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -18,9 +19,15 @@ public class WeekViewEvent {
     private String mLocation;
     private int mColor;
     private boolean mAllDay;
-    public String title;
+    public String title, loc;
     public WeekViewEvent(){
+    }
 
+    public String getRawTime(){
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        format.setCalendar(mStartTime);
+        String res = format.format(mStartTime.getTime()) + " - " + format.format(mEndTime.getTime());
+        return res;
     }
 
     /**

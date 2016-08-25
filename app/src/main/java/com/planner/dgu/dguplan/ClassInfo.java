@@ -21,6 +21,12 @@ public class ClassInfo {
         rawToMean();
     }
 
+    public ClassInfo(String title, String location, String rawtime){
+        this.title = title;
+        this.location = location;
+        this.rawtime = rawtime;
+    }
+
     public ClassInfo(String title, String location, String rawtime, int wday, boolean isValid){
         this.title = title;
         this.location = location;
@@ -50,6 +56,7 @@ public class ClassInfo {
         endTime.set(Calendar.MINUTE, emin);
         WeekViewEvent res = new WeekViewEvent(0, "[" + title + "]\n" + location, startTime, endTime);
         res.title = this.title;
+        res.loc = this.location;
         return res;
     }
 }

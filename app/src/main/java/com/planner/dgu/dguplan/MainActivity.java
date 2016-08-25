@@ -30,8 +30,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private SharedPreferences.Editor prefEditor;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
-    private Button menu1, menu2, menu3, menum, menus;
-    private TextView tv1;
+    private Button menu2, menu3, menus;
+    private TextView tv1, tv2;
     private DrawerArrowDrawable drawerArrowDrawable;
     private float offset;
     private boolean flipped;
@@ -52,19 +52,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         prefEditor.putString("userPw", userDTO.userPw);
         prefEditor.commit();
 
-        menu1 = (Button)findViewById(R.id.menu1);
         menu2 = (Button)findViewById(R.id.menu2);
         menu3 = (Button)findViewById(R.id.menu3);
-        menum = (Button)findViewById(R.id.menum);
         menus = (Button)findViewById(R.id.menus);
 
-        menu1.setOnClickListener(this);
         menu2.setOnClickListener(this);
         menu3.setOnClickListener(this);
-        menum.setOnClickListener(this);
         menus.setOnClickListener(this);
 
-        tv1 = (TextView)findViewById(R.id.textView1); // Get textView instance from view
+        tv2 = (TextView)findViewById(R.id.sName); // Get textView instance from view
+        tv2.setText(userDTO.userName);
+        tv1 = (TextView)findViewById(R.id.sID); // Get textView instance from view
+        tv1.setText(userDTO.userId);
 
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final ImageView imageView = (ImageView) findViewById(R.id.drawer_indicator);
@@ -112,11 +111,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         switch(v.getId()){
             case R.id.menus:
                 break;
-            case R.id.menu1:
-                break;
             case R.id.menu2:
-                break;
-            case R.id.menum:
                 break;
             case R.id.menu3:
                 prefEditor.putBoolean("autoLogin", false);

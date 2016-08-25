@@ -1,8 +1,11 @@
 package com.planner.dgu.dguplan;
 
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.graphics.RectF;
 import android.os.*;
 import android.support.v4.app.*;
+import android.util.Log;
 import android.view.*;
 
 import java.util.ArrayList;
@@ -15,7 +18,63 @@ import weekview.WeekViewEvent;
 
 public class fragment_main extends Fragment implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, View.OnClickListener{
 
+    private boolean isAlreadyDid = false;
+    private List<WeekViewEvent> dataList = new ArrayList<>();
     private WeekView mWeekView;
+    private SQLiteDatabase database;
+    private Handler h = new Handler();
+    private String dbName = "DGUPLAN";
+    private String createTable =
+            "create table if not exists CLASSES(" +
+                    "`id` integer primary key autoincrement, " +
+                    "`subject` text, " +
+                    "`location` text, " +
+                    "`rawtime` text, " +
+                    "`wday` integer);";
+    private String dropTable =
+            "drop table if exists CLASSES;";
+
+    public boolean isUnique(String subject, String location, String rawtime, int wday){
+        SQLiteStatement s = database.compileStatement( "select count(*) from CLASSES where `wday`=" + wday + " and `subject`='" + subject + "' and `rawtime`='" + rawtime + "' and `location`='" + location + "'; " );
+        long count = s.simpleQueryForLong();
+        if(count <= 0) return true;
+        else return false;
+    }
+
+    private void insertData(String subject, String location, String rawtime, int wday){
+        if(!isUnique(subject, location, rawtime, wday)) return;
+        Log.e("Inserted", subject + " / " + location + " / " + rawtime + " / " + wday);
+        database.beginTransaction();
+        try{
+            String sql = "insert into CLASSES(`subject`, `location`, `rawtime`, `wday`) values ('" + subject + "', '" + location + "', '" + rawtime + "', " + wday + ");";
+            database.execSQL(sql);
+            database.setTransactionSuccessful();
+        }catch(Exception e){
+            Log.e("Insertion Failed", "###############################################");
+        }finally{
+            database.endTransaction();
+        }
+    }
+
+    public void createDatabase(){
+        database = getActivity().openOrCreateDatabase(dbName, android.content.Context.MODE_PRIVATE, null);
+    }
+
+    public void dropTable(){
+        try{
+            database.execSQL(dropTable);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createTable(){
+        try{
+            database.execSQL(createTable);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onClick(View v){
@@ -31,8 +90,25 @@ public class fragment_main extends Fragment implements WeekView.EventClickListen
     }
     @Override
     public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-        return getEvents(newYear, newMonth);
+        List<WeekViewEvent> list = getEvents(newYear, newMonth);
+        if(!isAlreadyDid) {
+            h.post(dbInsert);
+            isAlreadyDid = true;
+        }
+        return list;
     }
+
+    Runnable dbInsert = new Runnable() {
+        @Override
+        public void run() {
+            dropTable();
+            createTable();
+            for(WeekViewEvent temp : dataList){
+                Log.e("dataList", Integer.toString(dataList.size()));
+                insertData(temp.title, temp.loc, temp.getRawTime(), temp.getStartTime().get(Calendar.DAY_OF_WEEK));
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +123,8 @@ public class fragment_main extends Fragment implements WeekView.EventClickListen
         Calendar fix = Calendar.getInstance();
         fix.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         mWeekView.goToDate(fix);
+
+        createDatabase();
 
         return rootView;
     }
@@ -81,6 +159,7 @@ public class fragment_main extends Fragment implements WeekView.EventClickListen
                             events.add(diff);
                         }*/
                         events.add(temp);
+                        dataList.add(temp);
                         temp = IntroActivity.session.days.get(j).get(i).toSimpleEvent(newYear, newMonth);
                         temp.setColor(getResources().getColor(R.color.colorPrimary));
                     }
@@ -98,6 +177,7 @@ public class fragment_main extends Fragment implements WeekView.EventClickListen
                         events.add(diff);
                     }*/
                     events.add(temp);
+                    dataList.add(temp);
                     temp = null;
                 }
             }

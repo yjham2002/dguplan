@@ -77,7 +77,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="155dp"
                 android:background="@color/colorPrimaryDark2"
                 android:baselineAligned="false">
 
@@ -86,15 +86,35 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:src="@drawable/smile"
+                        android:layout_marginTop="@dimen/default_margin"
+                        />
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Loading..."
-                        android:id="@+id/textView1"
-                        android:padding="15dp"
+                        android:text="Student"
+                        android:id="@+id/sName"
+                        android:gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/default_margin"
                         android:layout_gravity="center_horizontal"
-                        android:textColor="@color/white" />
-
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/default_text_large"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Student"
+                        android:id="@+id/sID"
+                        android:gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/week_padding"
+                        android:layout_marginBottom="@dimen/default_margin"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/default_text"
+                        />
                 </LinearLayout>
 
             </LinearLayout>
@@ -110,39 +130,6 @@
                     <LinearLayout
                         android:layout_width="match_parent" android:layout_height="fill_parent"
                         android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent" android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <android.support.v7.widget.AppCompatButton
-                                style="@style/Widget.AppCompat.Button.Borderless"
-                                android:id="@+id/menu1"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/white"
-                                android:layout_gravity="center_horizontal"
-                                android:text="프로필"
-                                android:gravity="left|center"
-                                android:padding="10dp"
-                                />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent" android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <android.support.v7.widget.AppCompatButton
-                                style="@style/Widget.AppCompat.Button.Borderless"
-                                android:id="@+id/menum"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/white"
-                                android:layout_gravity="center_horizontal"
-                                android:text="채팅"
-                                android:gravity="left|center"
-                                android:padding="10dp"
-                                />
-                        </LinearLayout>
-
                         <LinearLayout
                             android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal">
