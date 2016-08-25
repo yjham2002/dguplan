@@ -159,7 +159,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     title = userDTO.conn;
                     break;
                 case 1:
-                    title = "밥한끼";
+                    title = "과제 목록";
                     break;
                 default: break;
 

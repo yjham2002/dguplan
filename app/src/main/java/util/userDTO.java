@@ -3,6 +3,7 @@ package util;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.planner.dgu.dguplan.AssignInfo;
 import com.planner.dgu.dguplan.ClassInfo;
 import com.planner.dgu.dguplan.URLS;
 
@@ -24,8 +25,9 @@ public class userDTO extends AsyncTask<Void, Void, String> {
     public static String conn = "시간표", userId = "", userPw = "", userName = "";
 
     public String content ="";
-    public Document doc;
+    public Document doc, doc2;
     public boolean isConnected = false;
+    public static int asCnt = 0, handinCnt = 0, realCnt = 0;
 
     private SFCallback preprocessCallback;
     private SFCallback connCallback;
@@ -67,9 +69,17 @@ public class userDTO extends AsyncTask<Void, Void, String> {
                     .method(Connection.Method.POST)
                     .timeout(TIMEOUT)
                     .execute();
-            doc = Jsoup.connect(URLS.URL_TABLE_TEST)
+            doc = Jsoup.connect(URLS.URL_TABLE)
                     .followRedirects(true)
                     .cookies(res.cookies())
+                    .followRedirects(true)
+                    .method(Connection.Method.POST)
+                    .timeout(TIMEOUT)
+                    .post();
+            doc2 = Jsoup.connect(URLS.URL_ASSIGN)
+                    .followRedirects(true)
+                    .cookies(res.cookies())
+                    .followRedirects(true)
                     .method(Connection.Method.POST)
                     .timeout(TIMEOUT)
                     .post();
@@ -81,6 +91,17 @@ public class userDTO extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         if (isConnected){
+            Element assign = doc2.select("TABLE[class = list-table]").first();
+            for(Element row : assign.select("tr")) {
+                AssignInfo temp = null;
+                if(row.children().size() >= 7) {
+                    realCnt++;
+                    temp = new AssignInfo(row.child(0).text(), row.child(1).text(), row.child(2).text(), row.child(3).text(), row.child(4).text(), row.child(5).text(), row.child(6).text());
+                    if(row.child(4).text().trim().equals("제출완료") || row.child(4).text().trim().equals("평가완료")) handinCnt++;
+                }
+                if(asCnt != 0 && temp != null) AssignInfo.asList.add(temp);
+                asCnt++;
+            }
             Element userConnection = doc.select("SPAN[class = selected]").first();
             if(userConnection == null) {
                 connCallback.callback();
