@@ -116,7 +116,7 @@ public class userDTO extends AsyncTask<Void, Void, String> {
             for(Element row : assign.select("tr")) {
                 AssignInfo temp = null;
                 if(row.children().size() >= 7) {
-                    realCnt++;
+                    if(!row.child(4).text().trim().equals("제출여부")) realCnt++;
                     temp = new AssignInfo(row.child(0).text(), row.child(1).text(), row.child(2).text(), row.child(3).text(), row.child(4).text(), row.child(5).text(), row.child(6).text());
                     if(row.child(4).text().trim().equals("제출완료") || row.child(4).text().trim().equals("평가완료")) handinCnt++;
                 }

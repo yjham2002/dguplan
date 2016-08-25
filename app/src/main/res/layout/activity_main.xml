@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
     <!-- Action-bar looking view -->
     <FrameLayout
         android:layout_width="match_parent"
@@ -47,27 +46,43 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         >
-
-        <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/pager"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".MainActivity">
-
-            <android.support.v4.view.PagerTitleStrip
-                android:id="@+id/pager_title_strip"
+            android:layout_height="match_parent">
+            <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/pager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:background="@color/dark"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:textColor="@color/white"
-                android:textSize = "@dimen/default_text"
-                />
+                android:layout_height="match_parent"
+                tools:context=".MainActivity">
 
-        </android.support.v4.view.ViewPager>
+                <android.support.v4.view.PagerTitleStrip
+                    android:id="@+id/pager_title_strip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:background="@color/dark"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:textColor="@color/white"
+                    android:textSize = "@dimen/default_text"
+                    />
+
+            </android.support.v4.view.ViewPager>
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/banner_ad_unit_id"
+                android:layout_gravity="center_horizontal|bottom"
+                >
+            </com.google.android.gms.ads.AdView>
+
+        </FrameLayout>
+
         <LinearLayout
             android:layout_gravity="start"
             android:orientation="vertical"
@@ -130,21 +145,7 @@
                     <LinearLayout
                         android:layout_width="match_parent" android:layout_height="fill_parent"
                         android:orientation="vertical">
-                        <LinearLayout
-                            android:layout_width="match_parent" android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <android.support.v7.widget.AppCompatButton
-                                style="@style/Widget.AppCompat.Button.Borderless"
-                                android:id="@+id/menus"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/white"
-                                android:layout_gravity="center_horizontal"
-                                android:text="설정"
-                                android:gravity="left|center"
-                                android:padding="10dp"
-                                />
-                        </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal">

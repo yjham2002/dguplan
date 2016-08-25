@@ -111,6 +111,15 @@ public class fragment_main extends Fragment implements WeekView.EventClickListen
     };
 
     @Override
+    public void onResume(){
+        super.onResume();
+        mWeekView.goToHour(9.0);
+        Calendar fix = Calendar.getInstance();
+        fix.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        mWeekView.goToDate(fix);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);

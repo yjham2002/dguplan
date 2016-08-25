@@ -22,6 +22,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import util.userDTO;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener{
@@ -30,7 +33,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private SharedPreferences.Editor prefEditor;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
-    private Button menu2, menu3, menus;
+    private Button menu2, menu3;
     private TextView tv1, tv2;
     private DrawerArrowDrawable drawerArrowDrawable;
     private float offset;
@@ -54,11 +57,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         menu2 = (Button)findViewById(R.id.menu2);
         menu3 = (Button)findViewById(R.id.menu3);
-        menus = (Button)findViewById(R.id.menus);
 
         menu2.setOnClickListener(this);
         menu3.setOnClickListener(this);
-        menus.setOnClickListener(this);
 
         tv2 = (TextView)findViewById(R.id.sName); // Get textView instance from view
         tv2.setText(userDTO.userName);
@@ -75,7 +76,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mSectionsPagerAdapter = new MainActivity.SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
+        AdView mAdView = (AdView)findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).addTestDevice("FE4EB46DF11F124494E4B402287CE845").build();
+        mAdView.loadAd(adRequest);
         drawer.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -109,9 +112,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     public void onClick(View v){
         switch(v.getId()){
-            case R.id.menus:
-                break;
             case R.id.menu2:
+                Intent i2 = new Intent(this, InfoActivity.class);
+                startActivity(i2);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.menu3:
                 prefEditor.putBoolean("autoLogin", false);

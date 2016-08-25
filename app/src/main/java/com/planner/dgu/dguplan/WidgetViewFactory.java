@@ -108,5 +108,8 @@ public class WidgetViewFactory implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public void onDataSetChanged() {
+        createDatabase();
+        createTable();
+        selectData();
     }
 }

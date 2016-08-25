@@ -32,7 +32,7 @@ public class fragment_sub_01 extends Fragment{
 
         AssignInfo.mAdapter.dataChange();
 
-        _asCnt.setText("총 " + (userDTO.realCnt - 1) + "건의 과제 중 " + userDTO.handinCnt + "건 제출");
+        _asCnt.setText("총 " + (userDTO.realCnt) + "건의 과제 중 " + userDTO.handinCnt + "건 제출");
 
         return rootView;
     }

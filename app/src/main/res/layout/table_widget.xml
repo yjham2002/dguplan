@@ -3,34 +3,51 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/widget_margin">
-    <LinearLayout
-        android:orientation="horizontal"
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_above="@+id/words"
-        android:layout_alignTop="@+id/words"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:padding="@dimen/default_margin"
-        android:background="@color/colorPrimary">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="match_parent"
-            android:id="@+id/imageView2"
-            android:src="@drawable/logo"
-            android:layout_gravity="center_vertical" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_above="@+id/words"
+            android:layout_alignTop="@+id/words"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:padding="@dimen/default_margin"
+            android:background="@color/colorPrimary">
 
-        <TextView
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:id="@+id/imageView2"
+                android:src="@drawable/logo"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="오늘의 시간표"
+                android:id="@+id/widget_title"
+                android:textColor="@color/white"
+                android:textSize="@dimen/default_text_mid"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/week_padding" />
+
+        </LinearLayout>
+
+        <Button
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:id="@+id/imageButtonSync"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="오늘의 시간표"
-            android:id="@+id/widget_title"
+            android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:textSize="@dimen/default_text_mid"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/week_padding" />
-    </LinearLayout>
+            android:text="업데이트"
+            android:padding="10dp"
+            android:layout_gravity="right" />
+    </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
