@@ -45,6 +45,7 @@ public class WidgetViewFactory implements RemoteViewsService.RemoteViewsFactory 
             e.printStackTrace();
         }
     }
+
     public void selectData(){
         Calendar cal = Calendar.getInstance();
         String sql = "select distinct `subject`, `location`, `rawtime` from CLASSES where `wday` = " + cal.get(Calendar.DAY_OF_WEEK) + " order by `id` asc";

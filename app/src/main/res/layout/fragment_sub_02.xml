@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/default_margin"
+        android:background="@color/monsoon">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="출결 정보 표시"
+            android:id="@+id/ascount2"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listView2"
+            android:drawSelectorOnTop="false"
+            android:dividerHeight="10dp"
+            android:divider="#00ffffff" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="(베타) 강의 시간 동안 해당 강의실과 1km 이상 차이가 날 경우, 지각/결석으로 예상하여 기록합니다."
+            android:padding="@dimen/default_margin"
+            android:layout_gravity="top"
+            android:textSize="@dimen/default_text"
+            android:background="@color/transparent_gray"
+            android:textColor="@color/white" />
+
+    </FrameLayout>
+
+</LinearLayout>

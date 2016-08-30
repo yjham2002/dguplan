@@ -1,5 +1,6 @@
 package com.planner.dgu.dguplan;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.*;
 import android.support.v4.app.*;
 import android.support.v7.widget.DefaultItemAnimator;

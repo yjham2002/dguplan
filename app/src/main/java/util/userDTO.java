@@ -18,6 +18,7 @@ import java.util.List;
 
 public class userDTO extends AsyncTask<Void, Void, String> {
 
+
     public static String conn = "시간표", userId = "", userPw = "", userName = "";
 
     public String content ="";
@@ -32,7 +33,7 @@ public class userDTO extends AsyncTask<Void, Void, String> {
 
     public List<List<ClassInfo>> days = new ArrayList<>();
 
-    private static final int TIMEOUT = 10000;
+    private static final int TIMEOUT = 15000;
 
     public userDTO(SFCallback preprocessCallback, SFCallback successCallback, SFCallback failCallback){
         this.preprocessCallback = preprocessCallback;

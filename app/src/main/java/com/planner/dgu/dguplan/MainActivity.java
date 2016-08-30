@@ -1,19 +1,30 @@
 package com.planner.dgu.dguplan;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -38,6 +49,46 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private DrawerArrowDrawable drawerArrowDrawable;
     private float offset;
     private boolean flipped;
+
+    public static AlarmManager mAlarmMgr;
+    public static final long cycle = 1;
+    public static final int MY_PERMISSION_ACCESS_COURSE_LOCATION = 11;
+
+    public void onAlarmStart() {
+        mAlarmMgr = (AlarmManager)getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        long cycleTime = 1000 * 60 * cycle;
+        long startTime = SystemClock.elapsedRealtime() + cycleTime;
+        Log.e("DGU_ALARM_SET", "Set startTime : " + startTime + ", cycleTime : " + cycleTime);
+        mAlarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, startTime, cycleTime, pIntent);
+    }
+
+    public void onAlarmStop() {
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
+        mAlarmMgr.cancel(pIntent);
+    }
+
+    public void onResume(){
+        super.onResume();
+        onAlarmStart();
+    }
+
+    public static boolean isPermissionGranted(Context context){
+        return !( Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED);
+    }
+
+    @TargetApi(23)
+    private void requestPermit(Context context) {
+        if (Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSION_ACCESS_COURSE_LOCATION);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +158,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 }
             }
         });
-
+        requestPermit(this);
     }
 
     public void onClick(View v){
@@ -140,6 +191,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             switch(position){
                 case 0: temp = new fragment_main(); break;
                 case 1: temp = new fragment_sub_01(); break;
+                case 2: temp = new fragment_sub_02(); break;
                 default: temp = null; break;
             }
             return temp;
@@ -147,7 +199,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -159,6 +211,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     break;
                 case 1:
                     title = "과제 목록";
+                    break;
+                case 2:
+                    title = "출결 정보";
                     break;
                 default: break;
 
