@@ -37,16 +37,6 @@
             android:divider="#00ffffff" />
 
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="(베타) 강의 시간 동안 해당 강의실과 1km 이상 차이가 날 경우, 지각/결석으로 예상하여 기록합니다."
-            android:padding="@dimen/default_margin"
-            android:layout_gravity="top"
-            android:textSize="@dimen/default_text"
-            android:background="@color/transparent_gray"
-            android:textColor="@color/white" />
-
     </FrameLayout>
 
 </LinearLayout>

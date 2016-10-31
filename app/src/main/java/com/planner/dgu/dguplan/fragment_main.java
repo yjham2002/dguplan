@@ -7,6 +7,7 @@ import android.os.*;
 import android.support.v4.app.*;
 import android.util.Log;
 import android.view.*;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -84,6 +85,7 @@ public class fragment_main extends Fragment implements WeekView.EventClickListen
     }
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
+        Toast.makeText(getActivity().getBaseContext(), event.getRawTime(), Toast.LENGTH_LONG).show();
     }
     @Override
     public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
